@@ -4,10 +4,32 @@
         <servlet-name>HelloWorld</servlet-name>
         <servlet-class>HelloWorld</servlet-class>
     </servlet>
+    <!--<servlet>
+        <servlet-name>LogFilter</servlet-name>
+        <servlet-class>LogFilter</servlet-class>
+    </servlet>-->
     <servlet-mapping>
         <servlet-name>HelloWorld</servlet-name>
         <url-pattern>/HelloWorld</url-pattern>
     </servlet-mapping>
+    <!--<servlet-mapping>
+        <servlet-name>LogFilter</servlet-name>
+        <url-pattern>/LogFilter</url-pattern>
+    </servlet-mapping>-->
+    
+    <filter>
+        <filter-name>LogFilter</filter-name>
+        <filter-class>LogFilter</filter-class>
+            <init-param>
+                <param-name>test-param</param-name>
+                <param-value>Initialization Paramter</param-value>
+            </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>LogFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
     <session-config>
         <session-timeout>
             30
