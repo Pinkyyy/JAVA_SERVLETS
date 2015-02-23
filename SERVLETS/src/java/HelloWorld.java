@@ -27,8 +27,12 @@ public class HelloWorld extends HttpServlet {
         //set response content type
         response.setContentType("text/html");
         
+        String firstName = request.getParameter("first_name");
+        String lastName = request.getParameter("last_name");
+        
         try(PrintWriter out = response.getWriter()){
             out.println("<h1>" + message + "</h1>");
+            out.println("<p>" + firstName + " " + lastName + "</p>");
         }
     }
 
