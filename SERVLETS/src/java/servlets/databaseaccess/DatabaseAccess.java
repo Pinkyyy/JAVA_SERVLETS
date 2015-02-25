@@ -35,12 +35,13 @@ public class DatabaseAccess extends HttpServlet {
         
         Statement stmt = null;
         Connection conn = null;
+        PreparedStatement pstmt = null;
         
         try {
             //register JDBC driver - register library in project properties!!
             Class.forName("com.mysql.jdbc.Driver");            
-            Driver myDriver = new com.mysql.jdbc.Driver();
-            DriverManager.registerDriver(myDriver);
+            //Driver myDriver = new com.mysql.jdbc.Driver();
+            //DriverManager.registerDriver(myDriver);
             
             /*Properties info = new Properties( );
             info.put( "user", "root" );
@@ -50,9 +51,9 @@ public class DatabaseAccess extends HttpServlet {
             //open a connection
             conn = DriverManager.getConnection(URL, USER, PASS);
             
-            //create query
+            //create select query
             stmt = conn.createStatement();
-            String sql;
+            String sql;      
             sql = "SELECT id, first, last, age FROM employees";
             
             //execute query            
@@ -60,6 +61,7 @@ public class DatabaseAccess extends HttpServlet {
             
             // Set response content type
             response.setContentType("text/html");
+            
             try(PrintWriter out = response.getWriter()){
                 //extract data from resultset
                 while(rs.next()){
@@ -77,31 +79,38 @@ public class DatabaseAccess extends HttpServlet {
                 }
             }
             
+            //create update query
+            sql = "UPDATE employees SET age = ? WHERE id = ?";
+            pstmt = conn.prepareStatement(sql);   
+            pstmt.setInt(1, 50);
+            pstmt.setInt(2, 103);
+            pstmt.executeUpdate();
+            
             // Clean-up environment
             rs.close();
             stmt.close();
+            pstmt.close();
             conn.close();
          
-         }catch(SQLException se){
-         //Handle errors for JDBC
-         se.printStackTrace();
-      }catch(Exception e){
-         //Handle errors for Class.forName
-         e.printStackTrace();
-      }finally{
-         //finally block used to close resources
-         try{
-            if(stmt!=null)
-               stmt.close();
-         }catch(SQLException se2){
-         }// nothing we can do
-         try{
-            if(conn!=null)
-            conn.close();
-         }catch(SQLException se){
-            se.printStackTrace();
-         }//end finally try
-      } //end try
+        }catch(SQLException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        finally{ //finally block used to close resources
+            
+            try{
+               if(stmt!=null)
+                  stmt.close();
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+            
+            try{
+               if(conn!=null)
+               conn.close();
+            }catch(SQLException e){
+                e.printStackTrace();
+            }//end finally try
+        } //end try
         
         
     }
